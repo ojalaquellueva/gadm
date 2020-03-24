@@ -1,0 +1,60 @@
+#!/bin/bash
+
+##############################################################
+# Application parameters
+# Check and change as needed
+##############################################################
+
+# Target URL for GADM Geopackage, including file name
+# Australia only, for testing:
+#URL_DB_DATA="https://biogeo.ucdavis.edu/data/gadm3.6/gpkg/gadm36_AUS_gpkg.zip"
+# Complete GADM world package:
+URL_DB_DATA="https://biogeo.ucdavis.edu/data/gadm3.6/gadm36_gpkg.zip"
+
+# Name of downloaded compressed data package
+DB_DATA_ARCHIVE=$(basename $URL_DB_DATA)
+
+# Name of the main uncompressed data file
+DB_DATA=${DB_DATA_ARCHIVE/_gpkg/.gpkg}; DB_DATA=${DB_DATA/.zip/}
+
+# Base application directory
+APP_BASE_DIR="/home/boyle/bien/gadm";
+
+# Path to db_config.sh
+# For production, keep outside app working directory & supply
+# absolute path
+# For development, if keep inside working directory, then supply
+# relative path
+# Omit trailing slash
+db_config_path="${APP_BASE_DIR}/config"
+
+# Path to general function directory
+# If directory is outside app working directory, supply
+# absolute path, otherwise supply relative path
+# Omit trailing slash
+#functions_path=""
+functions_path="${APP_BASE_DIR}/src/includes"
+
+# Path to data directory
+# DB input data from GADM will be saved here
+# If directory is outside app working directory, supply
+# absolute path, otherwise use relative path (i.e., no 
+# forward slash at start).
+# Recommend keeping outside app directory
+# Omit trailing slash
+DATA_BASE_DIR="${APP_BASE_DIR}/data"
+
+# Database users
+user_admin="bien"		# Admin user
+user_read="public_bien"	# Read only user
+
+# Destination email for process notifications
+# You must supply a valid email if you used the -m option
+email="bboyle@email.arizona.edu"
+
+# Short name for this operation, for screen echo and 
+# notification emails. Number suffix matches script suffix
+pname="Build database 'gadm'"
+
+# General process name prefix for email notifications
+pname_header_prefix="BIEN notification: process"
