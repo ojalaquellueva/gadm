@@ -34,11 +34,19 @@ This script must be run by a user with sudo and authorization to connect to post
 * Recommend the following setup:
 
 ```
+# Create application base directory (call it whatever you want)
 mkdir -p gadm
 cd gadm
+
+# Create application code directory
 mkdir src
+
+# Install application code
 cd src
 git clone https://github.com/ojalaquellueva/gadm.git
+
+# Move data and sensitive parameters directories outside of code directory
+# Be sure to change paths to these directories (in params.sh) accordingly
 mv data ../
 mv config ../
 ```
@@ -47,12 +55,12 @@ mv config ../
 
 1. Set parameters in `params.sh`.
 2. Set passwords and other sensitive parameters in `config/db_config.sh`.
-2. Run the master script, `gadm.sh`.
+2. Run the master script, `gadm_db.sh`.
 
 ### Syntax
 
 ```
-./gadm.sh [options]
+./gadm_db.sh [options]
 ```
 
 ### Options
@@ -63,9 +71,9 @@ mv config ../
 ### Example:
 
 ```
-./gadm -m -s
+./gadm_db.sh -m -s
 ```
-* Run silently without terminal echo
-* Send notification message at start and completion
+* Runs silently without terminal echo
+* Sends notification message at start and completion
 
 
