@@ -11,6 +11,9 @@
 # Complete GADM world package:
 URL_DB_DATA="https://biogeo.ucdavis.edu/data/gadm3.6/gadm36_gpkg.zip"
 
+# Data version
+DB_DATA_VERSION="3.6"
+
 # Name of downloaded compressed data package
 DB_DATA_ARCHIVE=$(basename $URL_DB_DATA)
 

@@ -46,6 +46,8 @@ data_dir=$DATA_BASE_DIR
 # Main
 #########################################################################
 
+: <<'COMMENT_BLOCK_1'
+
 ############################################
 # Create database in admin role & reassign
 # to principal non-admin user of database
@@ -84,6 +86,9 @@ echoi $i "done"
 ############################################
 
 echoi $e "Downloading GADM data:"
+
+# Set date/time of access
+downloaded=$(date '+%F_%H:%M:%S')
 
 echoi $e -n "- Downloading to $data_dir..."
 rm -f ${data_dir}/${DB_DATA_ARCHIVE}
@@ -141,6 +146,9 @@ echoi $e -n "-- Sequences..."
 for tbl in `psql -qAt -c "select sequence_name from information_schema.sequences where sequence_schema = 'public';" gadm` ; do  sudo -Hiu postgres PGOPTIONS='--client-min-messages=warning' psql -q -c "alter sequence \"$tbl\" owner to $user_admin" gadm ; done
 source "$includes_dir/check_status.sh"  
 
+
+COMMENT_BLOCK_1
+
 ############################################
 # Create indexes
 ############################################
@@ -149,6 +157,22 @@ source "$includes_dir/check_status.sh"
 ############################################
 # Standardize political unit names using GNRS
 ############################################
+
+
+############################################
+# Create metada table
+############################################
+
+
+# REMOVE WHEN DONE TESTING
+downloaded=$(date '+%F_%H:%M:%S')
+
+
+
+
+echoi $e -n "Creating metadata table..."
+PGOPTIONS='--client-min-messages=warning' psql --set ON_ERROR_STOP=1 -d gadm -q -v URL_DB_DATA="$URL_DB_DATA" -v DB_DATA_VERSION="$DB_DATA_VERSION" -v downloaded="$downloaded" -f $DIR/sql/create_metadata.sql
+source "$includes_dir/check_status.sh"
 
 
 ######################################################
