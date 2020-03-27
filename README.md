@@ -15,7 +15,7 @@ Date created: 24 March 2020
 
 ## Overview
 
-Creates & populates a local postgres instance of the Global Administrative Areas(GADM) Database. Downloads entire GADM world database as Geopackage and imports to PostgreSQL database 'gadm'. Changes ownership to an admin-level user and enables select access for one read-only user, as specified in parameter file. Standardized political division names according to Geonames database (www.geonames.org). 
+Creates & populates a local postgres instance of the Global Administrative Areas(GADM) Database (www.gadm.org). Downloads entire GADM world database as Geopackage and imports to PostgreSQL database 'gadm'. Changes ownership to an admin-level user and enables select access for one read-only user, as specified in parameter file. Standardizes political division names according to Geonames (www.geonames.org) using the Geographic Name Resolution Service (GNRS, https://github.com/ojalaquellueva/gnrs.git).
 
 ## Software
 
@@ -24,24 +24,23 @@ PostgreSQL/psql 12.2, or higher (PostGIS extension will be installed by this scr
 
 ## Dependencies
 
-Requires postgres database geonames, installed locally. See repo `https://github.com/ojalaquellueva/gnrs.git`
+Optional standardization of political division names requires local installation of the GNRS (see rhttps://github.com/ojalaquellueva/gnrs.git). 
 
 ## Permissions
 
-This script must be run by a user with sudo and authorization to connect to postgres (as specified in `pg_hba` file). The admin-level and read-only Postgres users for the gadm database (specified in `params.sh`) should already exist and must be authorized to connect to postgres (as specified in pg_hba file).
+Scripts must be run by user with sudo, also authorization to connect to postgres (as specified in `pg_hba.conf`). Admin-level and read-only Postgres users for the gadm database (specified in `params.sh`) should already exist and must be authorized to connect to postgres (as specified in pg_hba file).
 
 ## Installation and configuration
-* Recommend the following setup:
 
 ```
-# Create application base directory (call it whatever you want)
+# Create application base directory
 mkdir -p gadm
 cd gadm
 
 # Create application code directory
 mkdir src
 
-# Install application code
+# Install repo to application code directory
 cd src
 git clone https://github.com/ojalaquellueva/gadm.git
 
