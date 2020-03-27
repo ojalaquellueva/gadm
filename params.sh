@@ -51,6 +51,11 @@ DATA_BASE_DIR="${APP_BASE_DIR}/data"
 user_admin="bien"		# Admin user
 user_read="public_bien"	# Read only user
 
+# Absolute path to GNRS root application & data directories
+# Path to GNRS DB required for extracting political division tables
+GNRS_DIR="/home/boyle/bien/gnrs/src"
+GNRS_DATA_DIR="/home/boyle/bien/gnrs/data/user"
+
 # Destination email for process notifications
 # You must supply a valid email if you used the -m option
 email="bboyle@email.arizona.edu"

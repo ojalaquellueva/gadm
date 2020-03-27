@@ -22,7 +22,6 @@ DROP INDEX IF EXISTS gadm_engtype_1_idx;
 DROP INDEX IF EXISTS gadm_engtype_2_idx;
 DROP INDEX IF EXISTS gadm_engtype_3_idx;
 DROP INDEX IF EXISTS gadm_wkb_geometry_idx;
-DROP INDEX IF EXISTS gadm_wkb_geometry_geom_idx;
 
 CREATE INDEX gadm_fid_idx ON gadm USING BTREE (fid);
 CREATE INDEX gadm_uid_idx ON gadm USING BTREE (uid);

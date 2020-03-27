@@ -28,7 +28,7 @@ Optional standardization of political division names requires local installation
 
 ## Permissions
 
-Scripts must be run by user with sudo, also authorization to connect to postgres (as specified in `pg_hba.conf`). Admin-level and read-only Postgres users for the gadm database (specified in `params.sh`) should already exist and must be authorized to connect to postgres (as specified in pg_hba file).
+Scripts must be run by user with sudo. User must also have authorization to connect to postgres (as specified in `pg_hba.conf`) without a password. Admin-level and read-only Postgres users for the gadm database (specified in `params.sh`) should already exist, with authorization to connect to postgres.
 
 ## Installation and configuration
 
