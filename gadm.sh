@@ -92,10 +92,14 @@ EOF
 )"		
 confirm "$msg_conf"
 
+# Start time, send mail if requested and echo begin message
+source "$includes_dir/start_process.sh"  
+
 #########################################################################
 # Main
 #########################################################################
-echo "EXITING script `basename "$BASH_SOURCE"`"; exit 0
+: <<'COMMENT_BLOCK_1'
+
 ############################################
 # Create database in admin role & reassign
 # to principal non-admin user of database
@@ -177,6 +181,7 @@ if [ "$STANDARDIZE_POLDIV_NAMES" == "t" ]; then
 	source "${DIR}/standardize_poldiv_names.sh"
 fi
 
+COMMENT_BLOCK_1 
 ############################################
 # Alter ownership and permissions
 ############################################
@@ -209,7 +214,7 @@ EOF
 	source "$includes_dir/check_status.sh"  
 fi
 
-if [ "$USER_READ" != "" ]; then
+if [[ ! "$USER_READ" == "" ]]; then
 	echoi $e -n "- Granting read access to \"$USER_READ\"..."
 	sudo -Hiu postgres PGOPTIONS='--client-min-messages=warning' psql -q <<EOF
 	\set ON_ERROR_STOP on
