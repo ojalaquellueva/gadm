@@ -15,7 +15,7 @@ Date created: 24 March 2020
 
 ## Overview
 
-Creates & populates a local postgres instance of the Global Administrative Areas(GADM) Database (www.gadm.org). Downloads entire GADM world database as Geopackage and imports to PostgreSQL database 'gadm'. Changes ownership to an admin-level user and enables select access for one read-only user, as specified in parameter file. Standardizes political division names according to Geonames (www.geonames.org) using the Geographic Name Resolution Service (GNRS, https://github.com/ojalaquellueva/gnrs.git).
+Creates & populates a local postgres instance of the Global Administrative Areas(GADM) Database (www.gadm.org). Downloads entire GADM world database as Geopackage and imports to PostgreSQL database 'gadm'. Optionally changes ownership to an admin-level user and adds one read-only user, as specified in parameter file. Optionally populates additional columns consisting of standardized political division names according to Geonames (www.geonames.org). Names standardized using the Geographic Name Resolution Service (GNRS, https://github.com/ojalaquellueva/gnrs.git).
 
 ## Software
 
@@ -28,7 +28,8 @@ Optional standardization of political division names requires local installation
 
 ## Permissions
 
-Scripts must be run by user with sudo. User must also have authorization to connect to postgres (as specified in `pg_hba.conf`) without a password. Admin-level and read-only Postgres users for the gadm database (specified in `params.sh`) should already exist, with authorization to connect to postgres.
+* Scripts must be run by user with sudo. User must also have authorization to connect to postgres (as specified in `pg_hba.conf`) without a password. 
+* Admin-level and read-only Postgres users for the gadm database (specified in `params.sh`) must already exist, with authorization to connect to postgres.
 
 ## Installation and configuration
 
@@ -59,18 +60,19 @@ mv config ../
 ### Syntax
 
 ```
-./gadm_db.sh [options]
+./gadm.sh [options]
 ```
 
-### Options
+### Command line options
 -m: Send notification emails  
 -n: No warnings: suppress confirmations but not progress messages  
 -s: Silent mode: suppress all confirmations & progress messages  
+* All other options must be set in params.inc
 
 ### Example:
 
 ```
-./gadm_db.sh -m -s
+./gadm.sh -m -s
 ```
 * Runs silently without terminal echo
 * Sends notification message at start and completion
