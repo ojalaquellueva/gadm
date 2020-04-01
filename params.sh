@@ -5,6 +5,11 @@
 # Check and change as needed
 ##############################################################
 
+# Code version (github repo for this code)
+# Assign tag and use tag #
+# Otherwise entire commit hash or leave blank
+VERSION="3.6"
+
 # Target URL for GADM Geopackage, including file name
 # Australia only, for testing:
 #URL_DB_DATA="https://biogeo.ucdavis.edu/data/gadm3.6/gpkg/gadm36_AUS_gpkg.zip"

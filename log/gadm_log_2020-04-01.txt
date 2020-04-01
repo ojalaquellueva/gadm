@@ -7,4 +7,30 @@ Installing extensions:
 Downloading GADM data:
 - Downloading to /home/boyle/bien/gadm/data...done (16.83 sec)
 - Unzipping...done (16.14 sec)
-Importing GADM data...
+Importing GADM data...done (94.32 sec)
+Removing GADM data file (keeping compressed version)...done (.01 sec)
+Creating metadata table...done (.08 sec)
+- Altering table gadm...done (71.80 sec)
+- Extracting  verbatim political divisions to table 'gadm_poldivs'...done (1.65 sec)
+- Exporting CSV file of political divisions for scrubbing by GNRS...done (.16 sec)
+- Scrubbing political divisions with GNRS...done (1.42 sec)
+- Creating GNRS results table "gadm_gnrs"...done (.09 sec)
+- Importing GNRS validation results...done (1.48 sec)
+- Indexing "gadm_gnrs"...done (7.77 sec)
+- Updating political division columns in table "gadm"...done (44.95 sec)
+- Indexing "gadm"...done (15.94 sec)
+- Dropping temporary tables...done (.11 sec)
+Changing database ownership and permissions:
+- Changing DB owner to 'USER_ADMIN'...done (.12 sec)
+- Granting permissions...done
+- Transferring ownership of non-postgis relations to user 'bien':
+-- Tables...done (.45 sec)
+-- Sequences...done (.17 sec)
+- Granting read access to "bien_private"...done
+- Creating lookup tables of gadm political divisions...done (4.15 sec)
+- Creating lookup tables of gnrs political divisions...done (3.46 sec)
+Creating remaining indexes...done (26.88 sec)
+Optimizing indexes...done (16.10 sec)
+
+------ Operation 'Build database gadm' completed in 495.44 seconds ------
+
