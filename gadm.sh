@@ -181,7 +181,8 @@ if [ "$STANDARDIZE_POLDIV_NAMES" == "t" ]; then
 	source "${DIR}/standardize_poldiv_names.sh"
 fi
 
-COMMENT_BLOCK_1 
+COMMENT_BLOCK_1
+
 ############################################
 # Alter ownership and permissions
 ############################################
