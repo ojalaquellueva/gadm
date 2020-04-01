@@ -228,10 +228,20 @@ EOF
 	echoi $i "done"
 fi 
 
+#########################################################################
+# Creating world geom poldiv tables, for quick filtering
+#########################################################################
+
+echoi $e -n "- Creating lookup tables of gadm political divisions..."
+PGOPTIONS='--client-min-messages=warning' psql -d gadm --set ON_ERROR_STOP=1 -q -f $DIR/sql/create_gadm_poldiv_tables.sql
+source "$DIR/includes/check_status.sh"	
+
+echoi $e -n "- Creating lookup tables of gnrs political divisions..."
+PGOPTIONS='--client-min-messages=warning' psql -d gadm --set ON_ERROR_STOP=1 -q -f $DIR/sql/create_gnrs_poldiv_tables.sql
+source "$DIR/includes/check_status.sh"	
+
 ############################################
-############################################
-# 4. Create remaining indexes
-############################################
+# Create remaining indexes
 ############################################
 
 echoi $e -n "Creating indexes..."

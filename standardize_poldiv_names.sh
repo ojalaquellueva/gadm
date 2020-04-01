@@ -6,14 +6,14 @@
 # Purpose:
 #	Standardize GADM political division names according to Geonames 
 # 	(www.geonames.org) using the Geographic Name Resolution Service
-#	(GNRS, https://github.com/ojalaquellueva/gnrs.git). Standardized
+#	(GNRS). Standardized
 #	names are added as new columns to table gadm. Original GADM
 # 	names are not changed.
 #
 # Notes:
-#	* NOT standalone! MUST be called by master script gnrs.sh
+#	* NOT standalone! MUST be called by master script gadm.sh
 #	* Won't work if you do not have local installation of command-
-#		line GNRS
+#		line GNRS (https://github.com/ojalaquellueva/gnrs.git)
 #	* Optional. You can still build the basic GADM database without
 #		this step. To turn off, set STANDARDIZE_POLDIV_NAMES="f" in
 #		params.sh.
