@@ -80,18 +80,6 @@ echoi $e -n "-- Sequences..."
 for tbl in `psql -qAt -c "select sequence_name from information_schema.sequences where sequence_schema = 'public';" gadm` ; do  sudo -Hiu postgres PGOPTIONS='--client-min-messages=warning' psql -q -c "alter sequence \"$tbl\" owner to $user_admin" gadm ; done
 source "$includes_dir/check_status.sh"  
 
-############################################
-# Create indexes
-############################################
-
-echoi $e -n "Creating indexes..."
-PGOPTIONS='--client-min-messages=warning' psql --set ON_ERROR_STOP=1 -d gadm -q -v URL_DB_DATA="$URL_DB_DATA" -v DB_DATA_VERSION="$DB_DATA_VERSION" -v downloaded="$downloaded" -f $DIR/sql/create_indexes.sql
-source "$includes_dir/check_status.sh"
-
-echoi $e -n "Optimizing indexes..."
-PGOPTIONS='--client-min-messages=warning' psql --set ON_ERROR_STOP=1 -d gadm -q -c "VACUUM ANALYZE gadm"
-source "$includes_dir/check_status.sh"
-
 ######################################################
 # Report total elapsed time and exit
 ######################################################

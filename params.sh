@@ -47,12 +47,24 @@ functions_path="${APP_BASE_DIR}/src/includes"
 # Omit trailing slash
 DATA_BASE_DIR="${APP_BASE_DIR}/data"
 
-# Database users
-user_admin="bien"		# Admin user
-user_read="public_bien"	# Read only user
+# Makes user_admin the owner of the db and all objects in db
+# If leave user_admin blank ("") then database will be owned
+# by whatever user you use to run this script, and postgis tables
+# will belong to postgres
+USER_ADMIN="bien"		# Admin user
+
+# Give user_read select permission on the database
+# If leave blank ("") user_read will not be added and only
+# you will have access to db
+USER_READ="bien_private"	# Read only user
+
+# Add columns of political division names standardized using GNRS 
+# Values: t|f
+STANDARDIZE_POLDIV_NAMES="t"
 
 # Absolute path to GNRS root application & data directories
 # Path to GNRS DB required for extracting political division tables
+# Leave blank ("") if not applicable and/or STANDARDIZE_POLDIV_NAMES="f"
 GNRS_DIR="/home/boyle/bien/gnrs/src"
 GNRS_DATA_DIR="/home/boyle/bien/gnrs/data/user"
 
@@ -62,7 +74,7 @@ email="bboyle@email.arizona.edu"
 
 # Short name for this operation, for screen echo and 
 # notification emails. Number suffix matches script suffix
-pname="Build database 'gadm'"
+pname="Build database gadm"
 
 # General process name prefix for email notifications
 pname_header_prefix="BIEN notification: process"
