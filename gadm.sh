@@ -34,9 +34,9 @@ includes_dir=$DIR"/includes"
 # Load parameters, functions and get command-line options
 source "$includes_dir/startup_master.sh"
 
-# Suppress default confirmation message, but start timer
-suppress_main='true'
-source "$includes_dir/confirm.sh"
+# # Suppress default confirmation message, but start timer
+# suppress_main='true'
+# source "$includes_dir/confirm.sh"
 
 # Adjust data directory if needed
 data_dir=$DATA_BASE_DIR
@@ -98,7 +98,6 @@ source "$includes_dir/start_process.sh"
 #########################################################################
 # Main
 #########################################################################
-: <<'COMMENT_BLOCK_1'
 
 ############################################
 # Create database in admin role & reassign
@@ -180,8 +179,6 @@ source "$includes_dir/check_status.sh"
 if [ "$STANDARDIZE_POLDIV_NAMES" == "t" ]; then
 	source "${DIR}/standardize_poldiv_names.sh"
 fi
-
-COMMENT_BLOCK_1
 
 ############################################
 # Alter ownership and permissions

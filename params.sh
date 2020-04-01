@@ -78,3 +78,8 @@ pname="Build database gadm"
 
 # General process name prefix for email notifications
 pname_header_prefix="BIEN notification: process"
+
+# Log file parameters
+today=$(date +"%Y-%m-%d")
+glogfile="log/gadm_log_${today}.txt"
+appendlog="false"

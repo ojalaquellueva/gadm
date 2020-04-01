@@ -1,0 +1,10 @@
+
+------ Process started at Wed Apr  1 16:02:39 PDT 2020 ------
+
+Creating database 'gadm'...done (.76 sec)
+Installing extensions:
+- postgis...done
+Downloading GADM data:
+- Downloading to /home/boyle/bien/gadm/data...done (16.83 sec)
+- Unzipping...done (16.14 sec)
+Importing GADM data...
