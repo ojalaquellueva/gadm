@@ -164,6 +164,14 @@ rm -f ${data_dir}/${DB_DATA}
 source "$includes_dir/check_status.sh"  
 
 ############################################
+# Add additional spatial columns
+############################################
+
+echoi $e -n "Adding spatial columns geom and geog..."
+PGOPTIONS='--client-min-messages=warning' psql --set ON_ERROR_STOP=1 -d gadm -q -f $DIR/sql/add_spatial_columns.sql
+source "$includes_dir/check_status.sh"
+
+############################################
 # Create metadata table
 ############################################
 
