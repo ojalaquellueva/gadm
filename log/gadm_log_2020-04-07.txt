@@ -1,0 +1,9 @@
+
+------ Process started at Tue Apr  7 14:18:28 PDT 2020 ------
+
+- Exporting CSV file of political divisions for scrubbing by GNRS...done (.19 sec)
+- Scrubbing political divisions with GNRS...done (34.79 sec)
+- Creating GNRS results table "gadm_gnrs"...done (.19 sec)
+
+------ Operation 'Build database gadm' completed in 35.21 seconds ------
+
