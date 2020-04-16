@@ -23,7 +23,9 @@ DB_DATA_VERSION="3.6"
 DB_DATA_ARCHIVE=$(basename $URL_DB_DATA)
 
 # Name of the main uncompressed data file
-DB_DATA=${DB_DATA_ARCHIVE/_gpkg/.gpkg}; DB_DATA=${DB_DATA/.zip/}
+# Need both commands to replace '_' with '.' and remove extension
+DB_DATA=${DB_DATA_ARCHIVE/_gpkg/.gpkg}
+DB_DATA=${DB_DATA/.zip/}
 
 # Base application directory
 APP_BASE_DIR="/home/boyle/bien/gadm";
@@ -67,11 +69,24 @@ USER_READ="bien_private"	# Read only user
 # Values: t|f
 STANDARDIZE_POLDIV_NAMES="t"
 
+########################################################
+# GNRS parameters
+########################################################
+
 # Absolute path to GNRS root application & data directories
 # Path to GNRS DB required for extracting political division tables
 # Leave blank ("") if not applicable and/or STANDARDIZE_POLDIV_NAMES="f"
 GNRS_DIR="/home/boyle/bien/gnrs/src"
 GNRS_DATA_DIR="/home/boyle/bien/gnrs/data/user"
+
+# GNRS file names
+GNRS_INPUT_FILE="gadm_gnrs_submitted.csv"
+outfile_basename=$(basename ${GNRS_INPUT_FILE%.*})
+GNRS_RESULTS_FILE=$outfile_basename"_gnrs_results.csv"
+
+########################################################
+# Misc parameters
+########################################################
 
 # Destination email for process notifications
 # You must supply a valid email if you used the -m option

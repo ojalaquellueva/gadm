@@ -1,0 +1,17 @@
+
+------ Process started at Wed Apr 15 18:20:54 PDT 2020 ------
+
+- Creating lookup tables of gadm political divisions...done (4.26 sec)
+- Creating lookup tables of gnrs political divisions...done (3.15 sec)
+Changing database ownership and permissions:
+- Changing DB owner to 'bien'...done (.10 sec)
+- Granting permissions...done
+- Transferring ownership of non-postgis relations to user 'bien':
+-- Tables...done (1.06 sec)
+-- Sequences...done (.16 sec)
+- Granting read access to "bien_private"...done
+Creating remaining indexes...done (43.45 sec)
+Optimizing indexes...done (9.06 sec)
+
+------ Process 'Build database gadm' completed in 61.30 seconds ------
+

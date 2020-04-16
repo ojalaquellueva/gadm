@@ -5,7 +5,7 @@
 -- 	$VERSION
 -- 	$URL_DB_DATA
 -- 	$DB_DATA_VERSION
--- 	$downloaded
+-- 	$download_timestamp
 -- -------------------------------------------------------------------
 
 DROP TABLE IF EXISTS metadata;
@@ -26,5 +26,5 @@ VALUES (
 :'VERSION', 
 :'URL_DB_DATA', 
 :'DB_DATA_VERSION', 
-:'downloaded'
+:'download_timestamp'
 );

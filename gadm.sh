@@ -79,6 +79,8 @@ msg_conf="$(cat <<-EOF
 Run process '$pname' using the following parameters: 
 
 GADM source url:		$URL_DB_DATA
+GADM archive:			$DB_DATA_ARCHIVE
+GADM file:			$DB_DATA
 GADM version:			$DB_DATA_VERSION
 Data directory:			$DATA_BASE_DIR
 Standardize poldiv names:	$standardize_disp
@@ -98,6 +100,9 @@ source "$includes_dir/start_process.sh"
 #########################################################################
 # Main
 #########################################################################
+
+download_timestamp=$(date '+%F_%H:%M:%S')
+: <<'COMMENT_BLOCK_1'
 
 ############################################
 # Create database in admin role & reassign
@@ -139,7 +144,7 @@ echoi $i "done"
 echoi $e "Downloading GADM data:"
 
 # Set date/time of access
-downloaded=$(date '+%F_%H:%M:%S')
+download_timestamp=$(date '+%F_%H:%M:%S')
 
 echoi $e -n "- Downloading to $data_dir..."
 rm -f ${data_dir}/${DB_DATA_ARCHIVE}
@@ -176,7 +181,7 @@ source "$includes_dir/check_status.sh"
 ############################################
 
 echoi $e -n "Creating metadata table..."
-PGOPTIONS='--client-min-messages=warning' psql --set ON_ERROR_STOP=1 -d gadm -q -v VERSION="$VERSION" -v URL_DB_DATA="$URL_DB_DATA" -v DB_DATA_VERSION="$DB_DATA_VERSION" -v downloaded="$downloaded" -f $DIR/sql/create_metadata.sql
+PGOPTIONS='--client-min-messages=warning' psql --set ON_ERROR_STOP=1 -d gadm -q -v VERSION="$VERSION" -v URL_DB_DATA="$URL_DB_DATA" -v DB_DATA_VERSION="$DB_DATA_VERSION" -v download_timestamp="$download_timestamp" -f $DIR/sql/create_metadata.sql
 source "$includes_dir/check_status.sh"
 
 ############################################
@@ -187,6 +192,22 @@ source "$includes_dir/check_status.sh"
 if [ "$STANDARDIZE_POLDIV_NAMES" == "t" ]; then
 	source "${DIR}/standardize_poldiv_names.sh"
 fi
+
+
+COMMENT_BLOCK_1
+
+
+#########################################################################
+# Creating world geom poldiv tables, for quick filtering
+#########################################################################
+
+echoi $e -n "- Creating lookup tables of gadm political divisions..."
+PGOPTIONS='--client-min-messages=warning' psql -d gadm --set ON_ERROR_STOP=1 -q -f $DIR/sql/create_gadm_poldiv_tables.sql
+source "$DIR/includes/check_status.sh"	
+
+echoi $e -n "- Creating lookup tables of gnrs political divisions..."
+PGOPTIONS='--client-min-messages=warning' psql -d gadm --set ON_ERROR_STOP=1 -q -f $DIR/sql/create_gnrs_poldiv_tables.sql
+source "$DIR/includes/check_status.sh"	
 
 ############################################
 # Alter ownership and permissions
@@ -233,24 +254,12 @@ EOF
 	echoi $i "done"
 fi 
 
-#########################################################################
-# Creating world geom poldiv tables, for quick filtering
-#########################################################################
-
-echoi $e -n "- Creating lookup tables of gadm political divisions..."
-PGOPTIONS='--client-min-messages=warning' psql -d gadm --set ON_ERROR_STOP=1 -q -f $DIR/sql/create_gadm_poldiv_tables.sql
-source "$DIR/includes/check_status.sh"	
-
-echoi $e -n "- Creating lookup tables of gnrs political divisions..."
-PGOPTIONS='--client-min-messages=warning' psql -d gadm --set ON_ERROR_STOP=1 -q -f $DIR/sql/create_gnrs_poldiv_tables.sql
-source "$DIR/includes/check_status.sh"	
-
 ############################################
 # Create remaining indexes
 ############################################
 
 echoi $e -n "Creating remaining indexes..."
-PGOPTIONS='--client-min-messages=warning' psql --set ON_ERROR_STOP=1 -d gadm -q -v URL_DB_DATA="$URL_DB_DATA" -v DB_DATA_VERSION="$DB_DATA_VERSION" -v downloaded="$downloaded" -f $DIR/sql/create_indexes.sql
+PGOPTIONS='--client-min-messages=warning' psql --set ON_ERROR_STOP=1 -d gadm -q -v URL_DB_DATA="$URL_DB_DATA" -f $DIR/sql/create_indexes.sql
 source "$includes_dir/check_status.sh"
 
 echoi $e -n "Optimizing indexes..."

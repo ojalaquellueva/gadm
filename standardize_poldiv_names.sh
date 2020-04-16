@@ -38,7 +38,7 @@ PGOPTIONS='--client-min-messages=warning' psql -d gadm --set ON_ERROR_STOP=1 -q 
 source "$DIR/includes/check_status.sh"	
 
 echoi $e -n "- Exporting CSV file of political divisions for scrubbing by GNRS..."
-sql="\copy (select distinct '' as user_id, country, state_province, county_parish from gadm_poldivs_raw ) to ${GNRS_DATA_DIR}/gnrs_submitted.csv CSV HEADER"
+sql="\copy (select distinct '' as user_id, country, state_province, county_parish from gadm_poldivs_raw ) to ${GNRS_DATA_DIR}/${GNRS_INPUT_FILE} CSV HEADER"
 PGOPTIONS='--client-min-messages=warning' psql -d gadm --set ON_ERROR_STOP=1 -q -c "$sql"
 source "$DIR/includes/check_status.sh"
 
@@ -46,27 +46,8 @@ source "$DIR/includes/check_status.sh"
 # Validate political divisions
 #########################################################################
 
-# Back up current value of $DIR, process name and echo settings
-# As these will be reset by validation app
-DIR_BAK=$DIR		
-pname_bak=$pname
-e_bak=$e
-i_bak=$i
-prev_bak=$prev
-
 echoi $e -n "- Scrubbing political divisions with GNRS..."
-e=""; i=""	# Turn off application screen echo
-source $GNRS_DIR"/gnrs_import.sh" -s -n	# Import data to GNRS db
-source $GNRS_DIR"/gnrs.sh" -s			# Process poldivs with GNRS
-source $GNRS_DIR"/gnrs_export.sh" -s		# Export GNRS results
-
-# Restore settings
-DIR=$DIR_BAK
-pname=$pname_bak
-e=$e_bak
-i=$i_bak
-prev=$prev_bak
-
+$GNRS_DIR"/gnrs_batch.sh" -s -f "${GNRS_DATA_DIR}/${GNRS_INPUT_FILE}"
 source "$DIR/includes/check_status.sh"	
 
 #########################################################################
@@ -81,7 +62,7 @@ PGOPTIONS='--client-min-messages=warning' psql -d gadm --set ON_ERROR_STOP=1 -q 
 source "$DIR/includes/check_status.sh"	
 
 echoi $i -n "- Importing GNRS validation results..."
-sql="\COPY gadm_gnrs FROM '${GNRS_DATA_DIR}/gnrs_results.csv' DELIMITER ',' CSV HEADER;"
+sql="\COPY gadm_gnrs FROM '${GNRS_DATA_DIR}/${GNRS_RESULTS_FILE}' DELIMITER ',' CSV HEADER;"
 PGOPTIONS='--client-min-messages=warning' psql gadm $user -q -c "$sql"
 source "$DIR/includes/check_status.sh"	
 
@@ -104,11 +85,3 @@ source "$DIR/includes/check_status.sh"
 echoi $e -n "- Dropping temporary tables..."
 PGOPTIONS='--client-min-messages=warning' psql -d gadm --set ON_ERROR_STOP=1 -q -f $DIR/sql/drop_temp_tables.sql
 source "$DIR/includes/check_status.sh"	
-
-#########################################################################
-# Creating world geom poldiv tables, for quick filtering
-#########################################################################
-
-#echoi $e -n "- Creating lookup tables of gadm political divisions..."
-#PGOPTIONS='--client-min-messages=warning' psql -d gadm --set ON_ERROR_STOP=1 -q -f $DIR/sql/create_gadm_poldiv_tables.sql
-#source "$DIR/includes/check_status.sh"	
