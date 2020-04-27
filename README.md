@@ -1,4 +1,4 @@
-# Build GADM PostgreSQL database
+# Import and standardize GADM PostgreSQL database
 
 Author: Brad Boyle (bboyle@email.arizona.edu)  
 Date created: 24 March 2020  
@@ -15,7 +15,9 @@ Date created: 24 March 2020
 
 ## Overview
 
-Creates & populates a local postgres instance of the Global Administrative Areas(GADM) Database (www.gadm.org). Downloads entire GADM world database as Geopackage and imports to PostgreSQL database 'gadm'. Optionally changes ownership to an admin-level user and adds one read-only user, as specified in parameter file. Optionally populates additional columns consisting of standardized political division names according to Geonames (www.geonames.org). Names standardized using the Geographic Name Resolution Service (GNRS, https://github.com/ojalaquellueva/gnrs.git).
+Creates & populates a local postgres instance of the Global Administrative Areas(GADM) Database (www.gadm.org). Downloads GADM world database as Geopackage and imports to PostgreSQL. Optionally, can changes ownership to an admin-level user and adds one or more read-only users. 
+
+Two optional standardization steps link GADM to Geonames (www.geonames.org) political divisions. Option 1 links directly by matching on ISO 3166-2 and HASC codes. Option 2 uses the GNRS (https://github.com/ojalaquellueva/gnrs.git) to perform both exact and fuzzy matching to geonames. Either step populates additional columns of standardized political division identifiers and names according to Geonames.
 
 ## Software
 
@@ -24,7 +26,8 @@ PostgreSQL/psql 12.2, or higher (PostGIS extension will be installed by this scr
 
 ## Dependencies
 
-Optional standardization of political division names requires local installation of the GNRS (see rhttps://github.com/ojalaquellueva/gnrs.git). 
+1. Optional standardization using ISO 3361-2 and HASC codes requires a lookup table of Admin 1 codes, downloaded from Natural Earth (https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/). Data package available here: `https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/`. 
+2. Optional standardization using the GNRS requires local installation of the GNRS (see rhttps://github.com/ojalaquellueva/gnrs.git). 
 
 ## Permissions
 

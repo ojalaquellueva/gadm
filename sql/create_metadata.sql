@@ -8,15 +8,15 @@
 -- 	$download_timestamp
 -- -------------------------------------------------------------------
 
-DROP TABLE IF EXISTS metadata;
-CREATE TABLE metadata (
+DROP TABLE IF EXISTS meta;
+CREATE TABLE meta (
 version text,
 data_uri text,
 data_version text,
 date_accessed timestamp
 );
 
-INSERT INTO metadata (
+INSERT INTO meta (
 version,
 data_uri, 
 data_version, 

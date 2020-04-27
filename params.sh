@@ -84,6 +84,18 @@ GNRS_INPUT_FILE="gadm_gnrs_submitted.csv"
 outfile_basename=$(basename ${GNRS_INPUT_FILE%.*})
 GNRS_RESULTS_FILE=$outfile_basename"_gnrs_results.csv"
 
+
+# Link to dbf file of admin1 political divisions and codes
+# Needed for linking GADM admin1 to geonames admin1
+# Once unzipped, you still need to be able to dump the dbf file
+URL_ADM1_LOOKUP="https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_1_states_provinces.zip"
+
+# Name of dbf file that needs to be unpacked. 
+# May not need this; only 1 dbf file in archive
+ADM1_LOOKUP_DBF="ne_10m_admin_1_states_provinces.dbf"
+
+
+
 ########################################################
 # Misc parameters
 ########################################################

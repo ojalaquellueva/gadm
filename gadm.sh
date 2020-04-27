@@ -101,7 +101,6 @@ source "$includes_dir/start_process.sh"
 # Main
 #########################################################################
 
-download_timestamp=$(date '+%F_%H:%M:%S')
 : <<'COMMENT_BLOCK_1'
 
 ############################################
@@ -193,13 +192,11 @@ if [ "$STANDARDIZE_POLDIV_NAMES" == "t" ]; then
 	source "${DIR}/standardize_poldiv_names.sh"
 fi
 
-
-COMMENT_BLOCK_1
-
-
 #########################################################################
-# Creating world geom poldiv tables, for quick filtering
+# Create derived tables and views
 #########################################################################
+
+echoi $e "Creating derived tables and views:"
 
 echoi $e -n "- Creating lookup tables of gadm political divisions..."
 PGOPTIONS='--client-min-messages=warning' psql -d gadm --set ON_ERROR_STOP=1 -q -f $DIR/sql/create_gadm_poldiv_tables.sql
@@ -208,6 +205,26 @@ source "$DIR/includes/check_status.sh"
 echoi $e -n "- Creating lookup tables of gnrs political divisions..."
 PGOPTIONS='--client-min-messages=warning' psql -d gadm --set ON_ERROR_STOP=1 -q -f $DIR/sql/create_gnrs_poldiv_tables.sql
 source "$DIR/includes/check_status.sh"	
+
+
+COMMENT_BLOCK_1
+
+
+
+# Generate view of all non-spatial columns in gadm
+
+echoi $e "- Creating non-spatial view of gadm:"
+echoi $e -n "-- Generating SQL..."
+echo "DROP VIEW IF EXISTS gadm_nospatial;" > sql/create_gadm_nospatial.sql
+echo "CREATE VIEW gadm_nospatial AS" >> sql/create_gadm_nospatial.sql
+echo $(PGOPTIONS='--client-min-messages=warning' psql -d gadm -qt -c "SELECT 'SELECT ' || array_to_string(ARRAY(SELECT 'o' || '.' || c.column_name FROM information_schema.columns As c WHERE table_name = 'gadm' AND  c.column_name NOT IN('wkb_geometry','geom','geog') ), ',') || ' FROM gadm As o;' As sqlst")  >> sql/create_gadm_nospatial.sql
+source "$DIR/includes/check_status.sh"	
+
+echoi $e -n "-- Creating view..."
+PGOPTIONS='--client-min-messages=warning' psql -d gadm --set ON_ERROR_STOP=1 -q -f $DIR/sql/create_gadm_nospatial.sql
+source "$DIR/includes/check_status.sh"	
+
+: <<'COMMENT_BLOCK_2'
 
 ############################################
 # Alter ownership and permissions
@@ -265,6 +282,8 @@ source "$includes_dir/check_status.sh"
 echoi $e -n "Optimizing indexes..."
 PGOPTIONS='--client-min-messages=warning' psql --set ON_ERROR_STOP=1 -d gadm -q -c "VACUUM ANALYZE gadm"
 source "$includes_dir/check_status.sh"
+
+COMMENT_BLOCK_2
 
 ######################################################
 # Report total elapsed time and exit
