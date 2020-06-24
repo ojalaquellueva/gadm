@@ -1,0 +1,11 @@
+
+------ Process started at Wed May 13 18:14:57 PDT 2020 ------
+
+Creating lookup tables of gadm political divisions...done (3.93 sec)
+Linking gadm political divisions to geonames:
+- Countries...done (.48 sec)
+- Admin 1...done (4.22 sec)
+- Admin 2...done (39.35 sec)
+Adding new gadm political divisions to gnrs/geonames tables:
+- Countries...done (.46 sec)
+- Admin 1...done (1.02 sec)

@@ -1,9 +1,11 @@
 
------- Process started at Mon Apr 27 15:45:14 PDT 2020 ------
+------ Process started at Mon Apr 27 17:26:34 PDT 2020 ------
 
-- Creating non-spatial view of gadm:
--- Generating SQL...done (.10 sec)
--- Creating view...done (.08 sec)
+Importing tables from DB geonames to DB gadm:
+- Dropping previous tables, if any...done (1.24 sec)
+- Creating dumpfile...done (48.85 sec)
+- Importing tables from dumpfile...done (311.29 sec)
+- Removing dumpfile...done (.01 sec)
 
------- Process 'Build database gadm' completed in .21 seconds ------
+------ Process 'Build database gadm' completed in 361.80 seconds ------
 

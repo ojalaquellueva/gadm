@@ -5,6 +5,9 @@
 # Check and change as needed
 ##############################################################
 
+# Name of this database
+DB_GADM="gadm"
+
 # Code version (github repo for this code)
 # Assign tag and use tag #
 # Otherwise entire commit hash or leave blank
@@ -28,7 +31,10 @@ DB_DATA=${DB_DATA_ARCHIVE/_gpkg/.gpkg}
 DB_DATA=${DB_DATA/.zip/}
 
 # Base application directory
-APP_BASE_DIR="/home/boyle/bien/gadm";
+APP_BASE_DIR="/home/boyle/bien/gadm"
+
+# Main application directory
+APP_DIR="${APP_BASE_DIR}/src"
 
 # Path to db_config.sh
 # For production, keep outside app working directory & supply
@@ -65,13 +71,16 @@ USER_ADMIN="bien"		# Admin user
 # you will have access to db
 USER_READ="bien_private"	# Read only user
 
-# Add columns of political division names standardized using GNRS 
-# Values: t|f
-STANDARDIZE_POLDIV_NAMES="t"
-
 ########################################################
 # GNRS parameters
 ########################################################
+
+# Add columns of political division names standardized using GNRS 
+# Values: t|f
+STANDARDIZE_GNRS="t"
+
+# GNRS database name
+DB_GNRS="gnrs"
 
 # Absolute path to GNRS root application & data directories
 # Path to GNRS DB required for extracting political division tables
@@ -84,17 +93,46 @@ GNRS_INPUT_FILE="gadm_gnrs_submitted.csv"
 outfile_basename=$(basename ${GNRS_INPUT_FILE%.*})
 GNRS_RESULTS_FILE=$outfile_basename"_gnrs_results.csv"
 
+########################################################
+# Natural Earth crosswalk table parameters
+########################################################
+
+# Index political divisions to GNRS using Natural Earth crosswalk table
+# Values: t|f
+STANDARDIZE_NE="t"
+
+# Download crosswalk data directly from source?
+# Values:
+#	t 	Download directly from source
+#	f 	Import from file already present in data directory)
+# If $DOWNLOAD_CROSSWALK="f", you MUST manually download the archive,
+# extract the dbf file to utf-8 csv, and place it in the crosswalk
+# data directory
+DOWNLOAD_CROSSWALK="f"
 
 # Link to dbf file of admin1 political divisions and codes
 # Needed for linking GADM admin1 to geonames admin1
 # Once unzipped, you still need to be able to dump the dbf file
-URL_ADM1_LOOKUP="https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_1_states_provinces.zip"
+URL_ADM1_CROSSWALK="https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_1_states_provinces.zip"
+
+# The archive should just be the basename of the url, but 
+# adjust accordingly if not
+ARCHIVE_ADM1_CROSSWALK=$(basename $URL_ADM1_CROSSWALK)
 
 # Name of dbf file that needs to be unpacked. 
-# May not need this; only 1 dbf file in archive
-ADM1_LOOKUP_DBF="ne_10m_admin_1_states_provinces.dbf"
+# Adjust accordingly if this formula changes
+DBF_ADM1_CROSSWALK=${ARCHIVE_ADM1_CROSSWALK/.zip/.dbf}
 
+# This is only crosswalk file nameparameter needed needed
+# if not importing directly from source
+CSV_ADM1_CROSSWALK=${DBF_ADM1_CROSSWALK/.dbf/.csv}
 
+########################################################
+# Geonames parameters
+########################################################
+
+# Geonames database name
+DB_GEONAMES="geonames"
 
 ########################################################
 # Misc parameters
@@ -106,7 +144,7 @@ email="bboyle@email.arizona.edu"
 
 # Short name for this operation, for screen echo and 
 # notification emails. Number suffix matches script suffix
-pname="Build database gadm"
+pname="Build database $DB_GADM"
 
 # General process name prefix for email notifications
 pname_header_prefix="BIEN notification: process"

@@ -15,7 +15,7 @@
 #	* Won't work if you do not have local installation of command-
 #		line GNRS (https://github.com/ojalaquellueva/gnrs.git)
 #	* Optional. You can still build the basic GADM database without
-#		this step. To turn off, set STANDARDIZE_POLDIV_NAMES="f" in
+#		this step. To turn off, set STANDARDIZE_GNRS="f" in
 #		params.sh.
 #
 # Author: Brad Boyle (bboyle@email.arizona.edu)

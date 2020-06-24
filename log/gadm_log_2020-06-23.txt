@@ -1,0 +1,19 @@
+
+------ Process started at Tue Jun 23 17:22:44 PDT 2020 ------
+
+Creating lookup tables of gadm political divisions...done (2.96 sec)
+Importing tables from DB geonames to DB gadm:
+- Dropping previous tables, if any...done (.38 sec)
+- Creating dumpfile...done (52.70 sec)
+- Importing tables from dumpfile...done (317.66 sec)
+- Renaming geonames derived tables...done (.08 sec)
+- Removing dumpfile...done (0 sec)
+Importing ISO/HASC code crosswalk table:
+- Creating tables...done (.14 sec)
+- Inserting data from file 'ne_10m_admin_1_states_provinces.csv'...done (.45 sec)
+- Trimming whitespace from all columns in admin1_crosswalk_raw:
+-- Generating SQL...done (.14 sec)
+-- Executing SQL...done (157.48 sec)
+- Inserting data to table admin1_crosswalk...done (1.04 sec)
+- Altering table admin1_crosswalk...done (.24 sec)
+- Dropping table admin1_crosswalk_raw...done (.19 sec)

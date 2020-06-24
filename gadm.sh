@@ -59,11 +59,16 @@ if [[ "$USER_READ" != "" ]]; then
 	user_read_disp="$USER_READ"
 fi
 
-# GNRS messages
 standardize_disp="No"
 if [[ "$STANDARDIZE_POLDIV_NAMES" == "t" ]]; then
 	standardize_disp="Yes"
 fi
+
+download_crossswalk_disp="No"
+if [[ "$DOWNLOAD_CROSSWALK" == "t" ]]; then
+	download_crossswalk_disp="Yes"
+fi
+
 gnrs_dir_disp="[n/a]"
 if [[ "$GNRS_DIR" != "" ]] && [[ "$STANDARDIZE_POLDIV_NAMES" == "t" ]]; then
 	gnrs_dir_disp="$GNRS_DIR"
@@ -78,6 +83,7 @@ msg_conf="$(cat <<-EOF
 
 Run process '$pname' using the following parameters: 
 
+GADM DB:				$DB_GADM
 GADM source url:		$URL_DB_DATA
 GADM archive:			$DB_DATA_ARCHIVE
 GADM file:			$DB_DATA
@@ -86,6 +92,7 @@ Data directory:			$DATA_BASE_DIR
 Standardize poldiv names:	$standardize_disp
 GNRS directory:			$gnrs_dir_disp
 GNRS data directory:		$gnrs_data_dir_disp
+Download crosswalk table:	$download_crossswalk_disp
 Current user:			$curr_user
 Admin user/db owner:		$user_admin_disp
 Additional read-only user:	$user_read_disp
@@ -100,6 +107,12 @@ source "$includes_dir/start_process.sh"
 #########################################################################
 # Main
 #########################################################################
+
+# Run pointless command to trigger sudo password request, 
+# needed below. Should remain in effect for all
+# sudo commands in this script, regardless of sudo timeout
+sudo pwd >/dev/null
+
 
 : <<'COMMENT_BLOCK_1'
 
@@ -135,6 +148,15 @@ DROP EXTENSION IF EXISTS postgis;
 CREATE EXTENSION postgis;
 EOF
 echoi $i "done"
+
+echoi $e -n "- unaccent..."
+sudo -Hiu postgres PGOPTIONS='--client-min-messages=warning' psql -d gadm -q << EOF
+\set ON_ERROR_STOP on
+DROP EXTENSION IF EXISTS unaccent;
+CREATE EXTENSION unaccent;
+EOF
+echoi $i "done"
+
 
 ############################################
 # Download GADM data to data directory
@@ -182,38 +204,49 @@ source "$includes_dir/check_status.sh"
 echoi $e -n "Creating metadata table..."
 PGOPTIONS='--client-min-messages=warning' psql --set ON_ERROR_STOP=1 -d gadm -q -v VERSION="$VERSION" -v URL_DB_DATA="$URL_DB_DATA" -v DB_DATA_VERSION="$DB_DATA_VERSION" -v download_timestamp="$download_timestamp" -f $DIR/sql/create_metadata.sql
 source "$includes_dir/check_status.sh"
-
+		
 ############################################
 # Standardize poldiv names using GNRS if
 # requested. See separate script.
 ############################################
 
-if [ "$STANDARDIZE_POLDIV_NAMES" == "t" ]; then
-	source "${DIR}/standardize_poldiv_names.sh"
+if [ "$STANDARDIZE_GNRS" == "t" ]; then
+	source "${DIR}/standardize_gnrs.sh"
 fi
 
 #########################################################################
 # Create derived tables and views
 #########################################################################
 
-echoi $e "Creating derived tables and views:"
-
-echoi $e -n "- Creating lookup tables of gadm political divisions..."
+echoi $e -n "Creating lookup tables of gadm political divisions..."
 PGOPTIONS='--client-min-messages=warning' psql -d gadm --set ON_ERROR_STOP=1 -q -f $DIR/sql/create_gadm_poldiv_tables.sql
 source "$DIR/includes/check_status.sh"	
 
-echoi $e -n "- Creating lookup tables of gnrs political divisions..."
-PGOPTIONS='--client-min-messages=warning' psql -d gadm --set ON_ERROR_STOP=1 -q -f $DIR/sql/create_gnrs_poldiv_tables.sql
-source "$DIR/includes/check_status.sh"	
 
 
 COMMENT_BLOCK_1
 
+		
+############################################
+# Standardize poldiv names to GNRS using 
+# Natural Earth lookup table.
+############################################
+
+if [ "$STANDARDIZE_NE" == "t" ]; then
+	source "${DIR}/standardize_ne.sh"
+fi
 
 
-# Generate view of all non-spatial columns in gadm
 
-echoi $e "- Creating non-spatial view of gadm:"
+
+: <<'COMMENT_BLOCK_2'
+
+
+############################################
+# Generate view of non-spatial columns in gadm
+############################################
+
+echoi $e "Creating non-spatial view of gadm:"
 echoi $e -n "-- Generating SQL..."
 echo "DROP VIEW IF EXISTS gadm_nospatial;" > sql/create_gadm_nospatial.sql
 echo "CREATE VIEW gadm_nospatial AS" >> sql/create_gadm_nospatial.sql
@@ -223,8 +256,6 @@ source "$DIR/includes/check_status.sh"
 echoi $e -n "-- Creating view..."
 PGOPTIONS='--client-min-messages=warning' psql -d gadm --set ON_ERROR_STOP=1 -q -f $DIR/sql/create_gadm_nospatial.sql
 source "$DIR/includes/check_status.sh"	
-
-: <<'COMMENT_BLOCK_2'
 
 ############################################
 # Alter ownership and permissions
@@ -282,6 +313,7 @@ source "$includes_dir/check_status.sh"
 echoi $e -n "Optimizing indexes..."
 PGOPTIONS='--client-min-messages=warning' psql --set ON_ERROR_STOP=1 -d gadm -q -c "VACUUM ANALYZE gadm"
 source "$includes_dir/check_status.sh"
+
 
 COMMENT_BLOCK_2
 

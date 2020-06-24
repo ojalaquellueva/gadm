@@ -26,8 +26,27 @@ PostgreSQL/psql 12.2, or higher (PostGIS extension will be installed by this scr
 
 ## Dependencies
 
-1. Optional standardization using ISO 3361-2 and HASC codes requires a lookup table of Admin 1 codes, downloaded from Natural Earth (https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/). Data package available here: `https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/`. 
-2. Optional standardization using the GNRS requires local installation of the GNRS (see rhttps://github.com/ojalaquellueva/gnrs.git). 
+1. **ISO/HASC code crosswalk table**. For optional standardization using ISO 3361-2 and HASC codes. Requires a lookup table of Admin 1 codes, downloaded from Natural Earth (https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/). Data package available here: `https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/`. *Will be downloaded automatically by this application, unless url has changed*.
+
+2. **GNRS database**. Optional standardization using the GNRS requires local installation of the GNRS (see rhttps://github.com/ojalaquellueva/gnrs.git). 
+
+3. **PHP extension dBase**, for unpacking the ISO-HASC crosswalk table from dbf file. This is not a standard PHP extension.  On Ubuntu 16.04+, you will need to do the following:
+
+```
+sudo add-apt-repository ppa:ondrej/php
+suod apt update
+sudo apt install php-pear
+sudo apt install php7.0-dev
+sudo pecl install dBase
+```
+
+Now add the following line to php.ini:
+
+```
+extension=dbase.so
+```
+
+No need to restart PHP.
 
 ## Permissions
 

@@ -1,0 +1,13 @@
+
+------ Process started at Tue Apr 28 19:42:27 PDT 2020 ------
+
+Importing tables from DB geonames to DB gadm:
+Importing ISO/HASC code crosswalk table:
+- Creating table admin1_crosswalk...done (4.45 sec)
+- Inserting data from file 'ne_10m_admin_1_states_provinces.csv'...done (.30 sec)
+- Trimming whitespace from all columns in admin1_croswalk:
+-- Generating SQL...done (.08 sec)
+-- Executing sql...done (15.68 sec)
+
+------ Process 'Build database gadm' completed in 20.56 seconds ------
+

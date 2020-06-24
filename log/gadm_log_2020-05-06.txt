@@ -1,0 +1,10 @@
+
+------ Process started at Wed May  6 22:05:11 PDT 2020 ------
+
+Linking gadm political divisions to geonames:
+- Countries...done (4.84 sec)
+- Admin 1...done (1.77 sec)
+- Admin 2...done (25.18 sec)
+
+------ Process 'Build database gadm' completed in 31.83 seconds ------
+
