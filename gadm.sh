@@ -113,9 +113,6 @@ source "$includes_dir/start_process.sh"
 # sudo commands in this script, regardless of sudo timeout
 sudo pwd >/dev/null
 
-
-: <<'COMMENT_BLOCK_1'
-
 ############################################
 # Create database in admin role & reassign
 # to principal non-admin user of database
@@ -221,11 +218,6 @@ fi
 echoi $e -n "Creating lookup tables of gadm political divisions..."
 PGOPTIONS='--client-min-messages=warning' psql -d gadm --set ON_ERROR_STOP=1 -q -f $DIR/sql/create_gadm_poldiv_tables.sql
 source "$DIR/includes/check_status.sh"	
-
-
-
-COMMENT_BLOCK_1
-
 		
 ############################################
 # Standardize poldiv names to GNRS using 
@@ -235,12 +227,6 @@ COMMENT_BLOCK_1
 if [ "$STANDARDIZE_NE" == "t" ]; then
 	source "${DIR}/standardize_ne.sh"
 fi
-
-
-
-
-: <<'COMMENT_BLOCK_2'
-
 
 ############################################
 # Generate view of non-spatial columns in gadm
@@ -313,9 +299,6 @@ source "$includes_dir/check_status.sh"
 echoi $e -n "Optimizing indexes..."
 PGOPTIONS='--client-min-messages=warning' psql --set ON_ERROR_STOP=1 -d gadm -q -c "VACUUM ANALYZE gadm"
 source "$includes_dir/check_status.sh"
-
-
-COMMENT_BLOCK_2
 
 ######################################################
 # Report total elapsed time and exit
